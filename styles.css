@@ -1,0 +1,52 @@
+body {
+    width: 200px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+}
+
+.speed-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+
+button {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f8f8f8;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background: #e8e8e8;
+}
+
+button.active {
+    background: #4285f4;
+    color: white;
+    border-color: #2b6cd4;
+}
+
+.status {
+    min-height: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 12px;
+}
