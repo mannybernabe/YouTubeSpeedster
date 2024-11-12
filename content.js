@@ -1,7 +1,8 @@
 // YouTube Speed Enhancer - Content Script
 (() => {
     let currentSpeed = 1.0;
-    const SPEEDS = [1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0];
+    const MIN_SPEED = 0.1;
+    const MAX_SPEED = 16.0;
 
     // Load saved speed from storage
     chrome.storage.local.get(['youtubeSpeed'], (result) => {
@@ -25,17 +26,23 @@
                 return originalPlaybackRate.get.call(this);
             },
             set: function(speed) {
-                currentSpeed = speed;
-                chrome.storage.local.set({ youtubeSpeed: speed });
-                originalPlaybackRate.set.call(this, speed);
+                if (speed >= MIN_SPEED && speed <= MAX_SPEED) {
+                    currentSpeed = speed;
+                    chrome.storage.local.set({ youtubeSpeed: speed });
+                    originalPlaybackRate.set.call(this, speed);
+                }
             }
         });
 
         // Listen for speed change messages from popup
         chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             if (request.action === 'setSpeed') {
-                video.playbackRate = request.speed;
-                sendResponse({ success: true });
+                if (request.speed >= MIN_SPEED && request.speed <= MAX_SPEED) {
+                    video.playbackRate = request.speed;
+                    sendResponse({ success: true });
+                } else {
+                    sendResponse({ success: false });
+                }
             }
             if (request.action === 'getSpeed') {
                 sendResponse({ speed: video.playbackRate });

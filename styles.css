@@ -44,6 +44,28 @@ button.active {
     border-color: #2b6cd4;
 }
 
+.custom-speed {
+    display: flex;
+    gap: 5px;
+}
+
+.custom-speed input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.custom-speed input:focus {
+    outline: none;
+    border-color: #4285f4;
+}
+
+.custom-speed button {
+    white-space: nowrap;
+}
+
 .status {
     min-height: 20px;
     text-align: center;
