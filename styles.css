@@ -34,8 +34,13 @@ button {
     transition: all 0.2s ease;
 }
 
-button:hover {
+button:hover:not(:disabled) {
     background: #e8e8e8;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 button.active {
@@ -57,9 +62,14 @@ button.active {
     font-size: 14px;
 }
 
-.custom-speed input:focus {
+.custom-speed input:focus:not(:disabled) {
     outline: none;
     border-color: #4285f4;
+}
+
+.custom-speed input:disabled {
+    opacity: 0.5;
+    background: #f8f8f8;
 }
 
 .custom-speed button {
@@ -69,6 +79,21 @@ button.active {
 .status {
     min-height: 20px;
     text-align: center;
-    color: #666;
     font-size: 12px;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.status.error {
+    color: #d32f2f;
+    background: #ffebee;
+}
+
+.status.success {
+    color: #388e3c;
+    background: #e8f5e9;
+}
+
+.status.info {
+    color: #666;
 }

@@ -4,15 +4,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const setCustomSpeedButton = document.getElementById('setCustomSpeed');
     const status = document.getElementById('status');
 
-    // Get current speed and highlight active button
-    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-        chrome.tabs.sendMessage(tabs[0].id, {action: 'getSpeed'}, (response) => {
-            if (response && response.speed) {
-                highlightButton(response.speed);
-                customSpeedInput.value = response.speed;
+    // Check if we're on a YouTube page with video
+    function checkYouTubeVideo() {
+        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+            if (!tabs[0]?.url?.includes('youtube.com')) {
+                showStatus('Please navigate to a YouTube video', 'error');
+                disableControls(true);
+                return;
             }
+
+            chrome.tabs.sendMessage(tabs[0].id, {action: 'checkVideo'}, (response) => {
+                if (chrome.runtime.lastError) {
+                    showStatus('Unable to connect to YouTube page', 'error');
+                    disableControls(true);
+                    return;
+                }
+
+                if (!response?.hasVideo) {
+                    showStatus('No video found on page', 'error');
+                    disableControls(true);
+                    return;
+                }
+
+                disableControls(false);
+                getCurrentSpeed();
+            });
         });
-    });
+    }
+
+    // Get current speed and highlight active button
+    function getCurrentSpeed() {
+        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, {action: 'getSpeed'}, (response) => {
+                if (chrome.runtime.lastError) {
+                    showStatus('Unable to get current speed', 'error');
+                    return;
+                }
+
+                if (response?.success && response?.speed) {
+                    highlightButton(response.speed);
+                    customSpeedInput.value = response.speed;
+                }
+            });
+        });
+    }
 
     // Add click handlers to speed buttons
     buttons.forEach(button => {
@@ -28,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isValidSpeed(speed)) {
             setSpeed(speed);
         } else {
-            showStatus('Please enter a valid speed (0.1 to 16)');
+            showStatus('Please enter a valid speed (0.1 to 16)', 'error');
         }
     });
 
@@ -39,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isValidSpeed(speed)) {
                 setSpeed(speed);
             } else {
-                showStatus('Please enter a valid speed (0.1 to 16)');
+                showStatus('Please enter a valid speed (0.1 to 16)', 'error');
             }
         }
     });
@@ -50,12 +85,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 tabs[0].id,
                 {action: 'setSpeed', speed: speed},
                 (response) => {
-                    if (response && response.success) {
+                    if (chrome.runtime.lastError) {
+                        showStatus('Unable to set speed', 'error');
+                        return;
+                    }
+
+                    if (response?.success) {
                         highlightButton(speed);
                         customSpeedInput.value = speed;
-                        showStatus(`Speed set to ${speed}x`);
+                        showStatus(`Speed set to ${speed}x`, 'success');
                     } else {
-                        showStatus('Error setting speed');
+                        showStatus(response?.error || 'Error setting speed', 'error');
                     }
                 }
             );
@@ -75,10 +115,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function showStatus(message) {
+    function showStatus(message, type = 'info') {
         status.textContent = message;
-        setTimeout(() => {
-            status.textContent = '';
-        }, 2000);
+        status.className = 'status ' + type;
+        if (type !== 'error') {
+            setTimeout(() => {
+                status.textContent = '';
+                status.className = 'status';
+            }, 2000);
+        }
     }
+
+    function disableControls(disabled) {
+        buttons.forEach(button => button.disabled = disabled);
+        customSpeedInput.disabled = disabled;
+        setCustomSpeedButton.disabled = disabled;
+    }
+
+    // Initialize
+    checkYouTubeVideo();
 });
