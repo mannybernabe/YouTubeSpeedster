@@ -2,7 +2,7 @@
 
 A Chrome extension that enhances YouTube video playback with comprehensive speed control options. This extension adds 2.5x and 3x speed options along with custom speed input functionality, allowing for playback rates from 0.1x to 16x.
 
-![Extension Screenshot](screenshot.png)
+![Extension Screenshot](docs/screenshot.png)
 
 ## Features
 
