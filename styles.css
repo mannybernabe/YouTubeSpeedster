@@ -1,41 +1,113 @@
 body {
-    width: 200px;
-    padding: 10px;
+    width: 250px;
+    padding: 15px;
     font-family: Arial, sans-serif;
+    background: #fff;
 }
 
 .container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
-h2 {
-    margin: 0;
+.custom-speed {
+    display: flex;
+    gap: 8px;
+}
+
+.input-with-toggles {
+    position: relative;
+    flex: 1;
+    display: flex;
+}
+
+.custom-speed input {
+    flex: 1;
+    padding: 10px 15px;
+    padding-right: 35px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #666;
+}
+
+.custom-speed input::placeholder {
+    color: #999;
+}
+
+.custom-speed input:focus {
+    outline: none;
+    border-color: #999;
+}
+
+.speed-toggles {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.toggle-btn {
     padding: 0;
-    font-size: 16px;
-    color: #333;
-    text-align: center;
+    width: 24px;
+    height: 16px;
+    min-width: unset;
+    font-size: 10px;
+    line-height: 1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-btn:hover {
+    background: #f8f8f8;
+    border-color: #ccc;
+}
+
+.custom-speed button#setCustomSpeed {
+    padding: 10px 20px;
+    white-space: nowrap;
 }
 
 .speed-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.button-row {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
 }
 
 button {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: #f8f8f8;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
     cursor: pointer;
     font-size: 14px;
     transition: all 0.2s ease;
+    min-width: 60px;
+    text-align: center;
+}
+
+button.full-width {
+    width: 100%;
 }
 
 button:hover:not(:disabled) {
-    background: #e8e8e8;
+    background: #f8f8f8;
+    border-color: #ccc;
 }
 
 button:disabled {
@@ -44,36 +116,8 @@ button:disabled {
 }
 
 button.active {
-    background: #4285f4;
-    color: white;
-    border-color: #2b6cd4;
-}
-
-.custom-speed {
-    display: flex;
-    gap: 5px;
-}
-
-.custom-speed input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.custom-speed input:focus:not(:disabled) {
-    outline: none;
-    border-color: #4285f4;
-}
-
-.custom-speed input:disabled {
-    opacity: 0.5;
-    background: #f8f8f8;
-}
-
-.custom-speed button {
-    white-space: nowrap;
+    background: #f0f0f0;
+    border-color: #999;
 }
 
 .status {
